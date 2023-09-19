@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import { UserContext } from "../UserContextProvider";
 import { Link, Navigate, useParams } from "react-router-dom";
 import axios from "axios";
+import { PlacesPage } from "./PlacesPage";
 
 const Account = () => {
   const { ready, user, setUser } = useContext(UserContext);
@@ -52,14 +53,17 @@ const Account = () => {
           My accommodations
         </Link>
       </div>
+
       {subpage === "profile" && (
-        <div className=" text-center max-w-sm mx-auto">
+        <div className=" text-center max-w-sm mx-auto p-4">
           Logged in as {user.name} ({user.email}) <br />
-          <button onClick={handleLogout} className=" primary max-w-sm mt-2">
+          <button onClick={handleLogout} className=" primary max-w-sm mt-4">
             Logout
           </button>
         </div>
       )}
+
+      {subpage === "places" && <PlacesPage />}
     </div>
   );
 };
