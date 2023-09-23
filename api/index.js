@@ -41,7 +41,7 @@ app.post('/register', async (req, res) => {
 
 app.get('/profile', (req, res) => {
     const { token } = req.cookies;
-    if (token) { 
+    if (token) {
         jwt.verify(token, jwtSecret, {}, async (err, userData) => {
             if (err) res.json(null);
             const { name, email, _id } = await UserModel.findById(userData.id)
@@ -82,6 +82,3 @@ app.post('/logout', (req, res) => {
 app.listen(4000, () => {
     console.log("Server Started at port 4000")
 })
-
-// SULWuB1eDKDh9XG8
-// mongodb + srv://tanvirgeek:<password>@cluster0.k1x1dow.mongodb.net/
