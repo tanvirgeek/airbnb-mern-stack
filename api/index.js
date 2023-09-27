@@ -7,6 +7,8 @@ const UserModel = require('./models/User')
 const jwt = require('jsonwebtoken')
 const cookieParser = require('cookie-parser')
 const imageDownLoader = require('image-downloader')
+const multer = require('multer')
+const fs = require('fs')
 require('dotenv').config()
 
 const bcryptSalt = bcrypt.genSaltSync(10)
@@ -83,12 +85,29 @@ app.post('/logout', (req, res) => {
 app.post('/upload-by-link', async (req, res) => {
     const { link } = req.body;
     const newName = "photo" + Date.now() + '.jpg'
-    await imageDownLoader.image({
-        url: link,
-        dest: __dirname + '/uploads/' + newName
-    })
+    try {
+        await imageDownLoader.image({
+            url: link,
+            dest: __dirname + '/uploads/' + newName
+        })
+        res.json(newName)
+    } catch (err) {
+        res.status(422).json(err)
+    }
+})
 
-    res.json(newName)
+const photosMiddleware = multer({ dest: 'uploads/' })
+app.post('/upload', photosMiddleware.array('photos', 100), (req, res) => {
+    const uploadedFiles = [];
+    for (let i = 0; i < req.files.length; i++) {
+        const { path, originalname } = req.files[i]
+        const parts = originalname.split('.')
+        const ext = parts[parts.length - 1];
+        const newPath = path + '.' + ext
+        fs.renameSync(path, newPath)
+        uploadedFiles.push(newPath.replace('uploads/', ''))
+    }
+    res.json(uploadedFiles)
 })
 
 app.listen(4000, () => {
