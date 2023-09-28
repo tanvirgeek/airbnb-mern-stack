@@ -1,9 +1,18 @@
-const Perks = () => {
+const Perks = ({ selected, setPerks }) => {
+  function handleCbClick(ev) {
+    const { checked, name } = ev.target;
+    if (checked) {
+      setPerks([...selected, name]);
+    } else {
+      setPerks([...selected.filter((selectedName) => name != selectedName)]);
+    }
+  }
+
   return (
     <div>
       <div className=" grid gap-2 grid-cols-2 md:grid-cols-4 lg:grid-cols-6">
         <label className=" perks">
-          <input type="checkbox"></input>
+          <input type="checkbox" name="wifi" onChange={handleCbClick}></input>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -22,7 +31,11 @@ const Perks = () => {
         </label>
 
         <label className="perks">
-          <input type="checkbox"></input>
+          <input
+            type="checkbox"
+            name="parking"
+            onChange={handleCbClick}
+          ></input>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -41,7 +54,7 @@ const Perks = () => {
         </label>
 
         <label className="perks">
-          <input type="checkbox"></input>
+          <input type="checkbox" name="tv" onChange={handleCbClick}></input>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -60,7 +73,7 @@ const Perks = () => {
         </label>
 
         <label className="perks">
-          <input type="checkbox"></input>
+          <input type="checkbox" name="radio" onChange={handleCbClick}></input>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -79,7 +92,7 @@ const Perks = () => {
         </label>
 
         <label className="perks">
-          <input type="checkbox"></input>
+          <input type="checkbox" name="pets" onChange={handleCbClick}></input>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -98,7 +111,11 @@ const Perks = () => {
         </label>
 
         <label className="perks">
-          <input type="checkbox"></input>
+          <input
+            type="checkbox"
+            name="entrance"
+            onChange={handleCbClick}
+          ></input>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -118,6 +135,6 @@ const Perks = () => {
       </div>
     </div>
   );
-}
+};
 
-export default Perks
+export default Perks;

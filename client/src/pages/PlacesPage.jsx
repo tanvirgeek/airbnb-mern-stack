@@ -137,9 +137,9 @@ export const PlacesPage = () => {
             <div className=" mt-2 grid gap-2 grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
               {addedPhotos.length > 0 &&
                 addedPhotos.map((link) => (
-                  <div>
+                  <div className=" h-32 flex" key={link}>
                     <img
-                      className=" rounded-2xl"
+                      className=" rounded-2xl w-full object-cover"
                       src={"http://localhost:4000/uploads/" + link}
                     />
                   </div>
@@ -179,7 +179,7 @@ export const PlacesPage = () => {
 
             {preInput("Perks", "perks of your place")}
 
-            <Perks selected={perks} onChange={setPerks} />
+            <Perks selected={perks} setPerks={setPerks} />
 
             {preInput("Extra Info", "house rules, etc")}
             <textarea
