@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, Navigate, useParams } from "react-router-dom";
 import Perks from "../components/Perks";
 import axios from "axios";
 import PhotosUploader from "../components/PhotosUploader";
@@ -15,6 +15,7 @@ export const PlacesPage = () => {
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
   const [maxGuests, setMaxGuests] = useState(1);
+  const [redirect, setRedirect] = useState("")
 
   function inputHeader(text) {
     return <h2 className=" text-2xl mt-4">{text}</h2>;
@@ -31,6 +32,24 @@ export const PlacesPage = () => {
         {inputDescription(description)}
       </>
     );
+  }
+
+  async function addNewPlace(ev) {
+    ev.preventDefault()
+    const placeData = {
+      title, address, addedPhotos, description, perks, extraInfo,
+      checkIn, checkOut, maxGuests
+    }
+    try { 
+      await axios.post('/places', placeData)
+      setRedirect('/account/places')
+    } catch (err) {
+      console.log("Error Saving Places", err)
+    }
+  }
+
+  if (redirect) {
+    return <Navigate to={redirect}/>
   }
 
   return (
@@ -62,7 +81,7 @@ export const PlacesPage = () => {
 
       {action === "new" && (
         <div>
-          <form>
+          <form onSubmit={addNewPlace}>
             {preInput(
               "Title",
               "Title for you place should be short and catchy"

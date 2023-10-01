@@ -9,6 +9,7 @@ const cookieParser = require('cookie-parser')
 const imageDownLoader = require('image-downloader')
 const multer = require('multer')
 const fs = require('fs')
+const PlaceModel = require('./models/Place')
 require('dotenv').config()
 
 const bcryptSalt = bcrypt.genSaltSync(10)
@@ -108,6 +109,33 @@ app.post('/upload', photosMiddleware.array('photos', 100), (req, res) => {
         uploadedFiles.push(newPath.replace('uploads/', ''))
     }
     res.json(uploadedFiles)
+})
+
+app.post('/places', (req, res) => {
+    const { token } = req.cookies;
+    const {
+        title, address, addedPhotos, description, perks,
+        extraInfo, checkIn, checkOut, maxGuests
+    } = req.body;
+
+    if (token) {
+        jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+            if (err) res.json(null);
+            const placeDoc = await PlaceModel.create({
+                owner: userData.id,
+                title,
+                address,
+                description,
+                photos: addedPhotos,
+                perks,
+                extraInfo,
+                checkIn,
+                checkOut,
+                maxGuests
+            });
+            res.json(placeDoc)
+        })
+    }
 })
 
 app.listen(4000, () => {
